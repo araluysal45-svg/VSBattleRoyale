@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Storm Isle</title>
+<style>
+body{margin:0;overflow:hidden;background:#123;font-family:system-ui,sans-serif;color:#fff;user-select:none}
+canvas{display:block}.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,20,40,.78);z-index:5}
+.card{background:#1b2a47;padding:28px 34px;border-radius:14px;min-width:300px;text-align:center;box-shadow:0 8px 40px #0008}
+h1{margin:0 0 6px;color:#ffd24a}input,button{font:inherit;padding:10px 14px;border-radius:8px;border:0;margin:5px 0;width:100%;box-sizing:border-box}
+button{background:#ffd24a;cursor:pointer;font-weight:700}button:disabled{opacity:.4}.hide{display:none!important}
+#hud>*{position:fixed;pointer-events:none;text-shadow:0 1px 3px #000}#bars{left:20px;bottom:20px;width:280px}
+.bar{height:16px;background:#0008;border-radius:4px;margin-top:5px;overflow:hidden}.bar i{display:block;height:100%}
+#cross{left:50%;top:50%;width:12px;height:12px;margin:-6px;border:2px solid #fff;border-radius:50%;opacity:.8}
+#ammo{right:24px;bottom:20px;font-size:34px;font-weight:800}#top{right:20px;top:16px;text-align:right;font-size:18px}
+#storm{left:50%;top:14px;transform:translateX(-50%);font-size:20px;font-weight:700}#feed{left:20px;top:16px}
+#chat{left:20px;bottom:110px;width:340px;font-size:14px}#ci{position:fixed;left:20px;bottom:75px;width:340px;z-index:4}
+#hurt{inset:0;background:radial-gradient(transparent 40%,#f00a);opacity:0;transition:opacity .4s}
+</style></head><body>
+<div id="menu" class="ov"><div class="card"><h1>STORM ISLE</h1><div style="opacity:.7;margin-bottom:10px">Online battle royale — phase 1</div>
+<input id="name" placeholder="Username" maxlength="16"><input id="room" placeholder="Room code (blank = matchmaking)" maxlength="6">
+<button id="join">Play</button><div id="err" style="color:#f77;min-height:20px"></div>
+<div style="font-size:12px;opacity:.6">WASD move · Shift sprint · Space jump · Click shoot · R reload · Enter chat</div></div></div>
+<div id="lobby" class="ov hide"><div class="card"><h1>Lobby</h1><div>Room code: <b id="code"></b></div><div id="list" style="margin:12px 0"></div>
+<button id="start">Start match</button><div id="wait" style="opacity:.7"></div></div></div>
+<div id="end" class="ov hide"><div class="card"><h1 id="et"></h1><div id="es" style="margin:12px 0;font-size:18px"></div><button id="back">Return to lobby</button></div></div>
+<div id="hud" class="hide"><div id="cross"></div><div id="hurt"></div><div id="feed"></div><div id="chat"></div>
+<div id="top"></div><div id="storm"></div><div id="ammo"></div>
+<div id="bars"><div class="bar"><i id="sh" style="background:#4af;width:0"></i></div><div class="bar"><i id="hp" style="background:#5d5;width:100%"></i></div></div></div>
+<input id="ci" class="hide" maxlength="120" placeholder="Chat…">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script src="game.js"></script></body></html>
