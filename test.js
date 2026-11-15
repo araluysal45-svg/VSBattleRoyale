@@ -14,7 +14,15 @@ const has=(c,t)=>c.ev.some(m=>m.t===t);
   b.send({t:'start'});await sleep(100);ok(!has(a,'start'),'non-host cannot start');
   a.send({t:'start'});await sleep(300);ok(has(a,'start')&&has(b,'start'),'host starts match');
   a.send({t:'move',x:100,y:0,z:0,ry:0});await sleep(150);ok(has(a,'corr'),'teleport rejected (anti-cheat)');
-  for(let i=0;i<9&&!has(b,'over');i++){a.send({t:'shoot',dx:0,dy:-.07,dz:-1});await sleep(130);}
+  const lootMsg=a.ev.find(m=>m.t==='loot');ok(lootMsg&&lootMsg.list.length>=50,'loot spawned on the map ('+(lootMsg&&lootMsg.list.length)+')');
+  a.send({t:'pickup',id:50});await sleep(150);ok(a.me.inv.m===0&&a.me.gun==='rifle','far-away pickup rejected');
+  a.send({t:'pickup',id:1});a.send({t:'pickup',id:3});await sleep(300);
+  ok(a.me.inv.m===1&&a.me.gun==='smg','picked up medkit + SMG');ok(has(b,'lootrm'),'pickup broadcast to others');
+  for(let i=0;i<3;i++){b.send({t:'shoot',dx:0,dy:-.08,dz:1});await sleep(130);}
+  await sleep(150);const hp0=a.me.hp;ok(hp0<100,'took damage ('+hp0+')');
+  a.send({t:'use',k:'m'});await sleep(500);ok(a.me.use==='m','healing started');
+  await sleep(4000);ok(a.me.hp===100&&a.me.inv.m===0&&has(a,'healed'),'medkit healed to full');
+  for(let i=0;i<30&&!has(b,'over');i++){a.send({t:'shoot',dx:0,dy:-.07,dz:-1});await sleep(100);}
   await sleep(300);
   ok(has(a,'hit'),'server registered hits');
   ok(a.me.ammo<30,'ammo decremented server-side ('+a.me.ammo+')');
@@ -24,4 +32,4 @@ const has=(c,t)=>c.ev.some(m=>m.t===t);
   a.send({t:'lobby'});await sleep(200);ok(a.ev.filter(m=>m.t==='roster').pop().state==='lobby','room returns to lobby');
   console.log(fails?'FAILED':'ALL PASSED');srv.kill();process.exit(fails?1:0);
 })();
-setTimeout(()=>{console.log('TIMEOUT');srv.kill();process.exit(1);},20000);
+setTimeout(()=>{console.log('TIMEOUT');srv.kill();process.exit(1);},40000);
